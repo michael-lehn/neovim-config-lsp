@@ -36,7 +36,7 @@ keymap('n', '<S-l>', 'gt', opts)
 
 -- Navigate buffers
 keymap('n', '<S-Up>', ':bprevious<CR>', opts)
-keymap('n', '<S-Down>', 'bnext<CR>', opts)
+keymap('n', '<S-Down>', ':bnext<CR>', opts)
 
 -- hide last search
 keymap('n', '<Esc>', ':noh<cr>', opts)
