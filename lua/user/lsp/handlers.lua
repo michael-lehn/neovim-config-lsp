@@ -72,6 +72,42 @@ function M.on_attach(_, bufnr)
 
     -- Format command
     vim.api.nvim_buf_create_user_command(bufnr, 'Format', function()
+        if
+            vim.bo[bufnr].filetype == 'c'
+            or vim.bo[bufnr].filetype == 'cpp'
+            or vim.bo[bufnr].filetype == 'objc'
+            or vim.bo[bufnr].filetype == 'objcpp'
+        then
+            if vim.fn.executable('clang-format') == 0 then
+                vim.notify(
+                    'clang-format not found. Install via :MasonInstall clang-format (or your system package manager)',
+                    vim.log.levels.ERROR
+                )
+                return
+            end
+
+            local view = vim.fn.winsaveview()
+            local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+            local input = table.concat(lines, '\n')
+
+            -- clang-format reads from stdin, writes to stdout
+            local cmd = { 'clang-format' } -- optional: add style flags here
+            local out = vim.fn.system(cmd, input)
+
+            if vim.v.shell_error ~= 0 then
+                vim.notify('clang-format failed', vim.log.levels.ERROR)
+                return
+            end
+
+            local out_lines = vim.split(out, '\n', { plain = true })
+            if out_lines[#out_lines] == '' then
+                table.remove(out_lines, #out_lines)
+            end
+
+            vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, out_lines)
+            vim.fn.winrestview(view)
+            return
+        end
         if vim.bo[bufnr].filetype == 'lua' then
             if vim.fn.executable('stylua') == 0 then
                 vim.notify(
@@ -116,6 +152,18 @@ function M.on_attach(_, bufnr)
 
         vim.lsp.buf.format({ async = true })
     end, { desc = 'Format current buffer' })
+
+    vim.api.nvim_create_autocmd('BufWritePre', {
+        callback = function(args)
+            -- Nur normale Dateien, keine special buffers
+            if vim.bo[args.buf].buftype ~= '' then
+                return
+            end
+
+            -- Dein bestehender :Format-Befehl
+            vim.cmd('Format')
+        end,
+    })
 end
 
 return M
