@@ -28,6 +28,8 @@ keymap('n', '<C-h>', '<C-w>h', opts)
 keymap('n', '<C-j>', '<C-w>j', opts)
 keymap('n', '<C-k>', '<C-w>k', opts)
 keymap('n', '<C-l>', '<C-w>l', opts)
+keymap('n', '<C-Left>', 'gT', opts)
+keymap('n', '<C-Right>', 'gt', opts)
 keymap('n', '<S-h>', 'gT', opts)
 keymap('n', '<S-l>', 'gt', opts)
 

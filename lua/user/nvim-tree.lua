@@ -22,10 +22,10 @@ local function my_on_attach(bufnr)
 
     -- custom mappings
     vim.keymap.set("n", "<2-LeftMouse>", api.node.open.edit, opts("Open"))
-    vim.keymap.set('n', '<S-l>', 'gt', opts('Next tab'))
     vim.keymap.set('n', '<S-h>', 'gT', opts('Prev tab'))
-    vim.keymap.set('n', '<S-Left>', ':vertical resize -2<CR>', opts('Resize'))
-    vim.keymap.set('n', '<S-Right>', ':vertical resize +2<CR>', opts('Resize'))
+    vim.keymap.set('n', '<S-l>', 'gt', opts('Next tab'))
+    vim.keymap.set('n', '<S-Left>', 'gT', opts('Resize'))
+    vim.keymap.set('n', '<S-Right>', 'gt', opts('Resize'))
 
     vim.keymap.set('n', '?', api.tree.toggle_help, opts('Help'))
 
