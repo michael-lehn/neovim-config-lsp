@@ -8,27 +8,11 @@ local handlers = require('user.lsp.handlers')
 -- ---------------------------------------------------------------------
 require('mason').setup()
 
-local mlsp = require('mason-lspconfig')
-local registry = require('mason-registry')
-
-local function mason_available(pkgs)
-    local out = {}
-    for _, name in ipairs(pkgs) do
-        if registry.has_package(name) then
-            table.insert(out, name)
-        end
-        -- else: Paket existiert in Mason auf dieser Plattform nicht -> still skip
-    end
-    return out
-end
-
-mlsp.setup({
-    ensure_installed = mason_available({
+require('mason-lspconfig').setup({
+    ensure_installed = {
         'lua_ls',
         'stylua',
-        'clangd',
-        'clang-format',
-    }),
+    },
     automatic_installation = true,
 })
 
