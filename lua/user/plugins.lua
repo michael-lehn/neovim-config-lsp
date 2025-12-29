@@ -45,6 +45,10 @@ return packer.startup(function(use)
     use('nvim-tree/nvim-web-devicons')
     use('nvim-lualine/lualine.nvim')
     use('kyazdani42/nvim-tree.lua')
+    use({
+        'nvim-treesitter/nvim-treesitter',
+        run = ':TSUpdate',
+    })
 
     -- Colorschemes
     use('oxidescheme/oxide.nvim')
