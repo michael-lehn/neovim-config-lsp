@@ -43,7 +43,68 @@ function M.setup()
     })
 end
 
-function M.on_attach(_, bufnr)
+function M.on_attach(client, bufnr)
+    -- ------------------------------------------------------------
+    -- Clean separation: formatting is done ONLY via :Format
+    -- (isort/black, stylua, clang-format). Never via LSP.
+    -- ------------------------------------------------------------
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+
+    -- Filter Pyright "is not accessed" hints (they often have no diagnostic code)
+    if client.name == 'pyright' then
+        local orig = client.handlers['textDocument/publishDiagnostics']
+            or vim.lsp.handlers['textDocument/publishDiagnostics']
+
+        client.handlers['textDocument/publishDiagnostics'] = function(
+            err,
+            result,
+            ctx,
+            config
+        )
+            if result and result.diagnostics then
+                local filtered = {}
+                for _, d in ipairs(result.diagnostics) do
+                    local msg = d.message or ''
+                    local is_hint = (d.severity == nil)
+                        or (
+                            d.severity
+                            == vim.lsp.protocol.DiagnosticSeverity.Hint
+                        )
+                    local is_unnecessary = false
+                    if d.tags then
+                        for _, t in ipairs(d.tags) do
+                            if
+                                t == vim.lsp.protocol.DiagnosticTag.Unnecessary
+                            then
+                                is_unnecessary = true
+                                break
+                            end
+                        end
+                    end
+
+                    -- Drop only the "… is not accessed" / unnecessary hints
+                    if
+                        not (
+                            is_hint
+                            and is_unnecessary
+                            and msg:find('is not accessed', 1, true)
+                        )
+                    then
+                        table.insert(filtered, d)
+                    end
+                end
+                result.diagnostics = filtered
+            end
+            return orig(err, result, ctx, config)
+        end
+    end
+
+    -- Ruff should not "steal" hover; Pyright is better for that.
+    if client.name == 'ruff' then
+        client.server_capabilities.hoverProvider = false
+    end
+
     -- LSP navigation / info
     buf_map(bufnr, 'n', 'gD', vim.lsp.buf.declaration, 'LSP: declaration')
     buf_map(bufnr, 'n', 'gd', vim.lsp.buf.definition, 'LSP: definition')
@@ -133,13 +194,13 @@ function M.on_attach(_, bufnr)
 
             local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
             local input = table.concat(lines, '\n')
+            local fname = vim.api.nvim_buf_get_name(bufnr)
 
             -- --- 1) isort (stdin -> stdout)
             local res_isort = vim.system(
-                { 'isort', '-' },
+                { 'isort', '--filename', fname, '-' },
                 { stdin = input, text = true }
-            )
-                :wait()
+            ):wait()
 
             if res_isort.code ~= 0 then
                 vim.notify(
@@ -153,7 +214,7 @@ function M.on_attach(_, bufnr)
 
             -- --- 2) black (stdin -> stdout)
             local res_black = vim.system(
-                { 'black', '--quiet', '-' },
+                { 'black', '--quiet', '--stdin-filename', fname, '-' },
                 { stdin = input, text = true }
             ):wait()
 
@@ -218,7 +279,10 @@ function M.on_attach(_, bufnr)
             return
         end
 
-        vim.lsp.buf.format({ async = true })
+        vim.notify(
+            'No formatter configured for this filetype',
+            vim.log.levels.WARN
+        )
     end, { desc = 'Format current buffer' })
 
     vim.api.nvim_create_autocmd('BufWritePre', {

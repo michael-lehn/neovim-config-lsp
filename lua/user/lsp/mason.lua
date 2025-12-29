@@ -31,8 +31,8 @@ if want_mason_pkg('pyright', 'pyright-langserver') then
     table.insert(ensure, 'pyright')
 end
 
--- Ruff-LSP (Diagnostics/Code Actions)
-if want_mason_pkg('ruff', 'ruff-lsp') then
+-- Ruff (native LSP lives inside the ruff binary): Diagnostics/Code Actions
+if want_mason_pkg('ruff', 'ruff') then
     table.insert(ensure, 'ruff')
 end
 

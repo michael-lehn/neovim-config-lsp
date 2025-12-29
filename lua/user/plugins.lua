@@ -42,15 +42,15 @@ return packer.startup(function(use)
     use('wbthomason/packer.nvim') -- Have packer manage itself
     use('nvim-lua/popup.nvim') -- An implementation of the Popup API from vim in Neovim
     use('nvim-lua/plenary.nvim') -- Useful lua functions used by lots of plugins
-    use('kyazdani42/nvim-web-devicons')
-    use("nvim-lualine/lualine.nvim")
+    use('nvim-tree/nvim-web-devicons')
+    use('nvim-lualine/lualine.nvim')
     use('kyazdani42/nvim-tree.lua')
 
     -- Colorschemes
-    use("oxidescheme/oxide.nvim")
-    use("Ferouk/bearded-nvim")
-    use("joshdick/onedark.vim")
-    use("sainnhe/everforest")
+    use('oxidescheme/oxide.nvim')
+    use('Ferouk/bearded-nvim')
+    use('joshdick/onedark.vim')
+    use('sainnhe/everforest')
     -- use("sar/extra-darkplus.nvim")
     use('michael-lehn/darkplus.nvim')
 
@@ -70,6 +70,9 @@ return packer.startup(function(use)
     use('williamboman/mason.nvim') -- simple to use language server installer
     use('williamboman/mason-lspconfig.nvim') -- simple to use language server installer
     use('nvimtools/none-ls.nvim') -- LSP diagnostics and code actions
+
+    -- LSP UI
+    use('nvimdev/lspsaga.nvim')
 
     -- Automatically set up your configuration after cloning packer.nvim
     -- Put this at the end after all plugins
