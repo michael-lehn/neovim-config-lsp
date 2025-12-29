@@ -47,7 +47,12 @@ return packer.startup(function(use)
     use('kyazdani42/nvim-tree.lua')
     use({
         'nvim-treesitter/nvim-treesitter',
-        run = ':TSUpdate',
+        run = function()
+            local ok, install = pcall(require, 'nvim-treesitter.install')
+            if ok then
+                install.update({ with_sync = true })()
+            end
+        end,
     })
 
     -- Colorschemes
