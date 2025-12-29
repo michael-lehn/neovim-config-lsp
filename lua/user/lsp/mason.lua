@@ -65,6 +65,11 @@ if want_mason_pkg('isort', 'isort') then
     table.insert(ensure_tools, 'isort')
 end
 
+-- Tree-sitter CLI (needed to compile parsers)
+if want_mason_pkg('tree-sitter-cli', 'tree-sitter') then
+    table.insert(ensure_tools, 'tree-sitter-cli')
+end
+
 for _, pkg in ipairs(ensure_tools) do
     local ok, p = pcall(registry.get_package, pkg)
     if ok then
