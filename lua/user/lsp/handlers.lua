@@ -51,55 +51,6 @@ function M.on_attach(client, bufnr)
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentRangeFormattingProvider = false
 
-    -- Filter Pyright "is not accessed" hints (they often have no diagnostic code)
-    if client.name == 'pyright' then
-        local orig = client.handlers['textDocument/publishDiagnostics']
-            or vim.lsp.handlers['textDocument/publishDiagnostics']
-
-        client.handlers['textDocument/publishDiagnostics'] = function(
-            err,
-            result,
-            ctx,
-            config
-        )
-            if result and result.diagnostics then
-                local filtered = {}
-                for _, d in ipairs(result.diagnostics) do
-                    local msg = d.message or ''
-                    local is_hint = (d.severity == nil)
-                        or (
-                            d.severity
-                            == vim.lsp.protocol.DiagnosticSeverity.Hint
-                        )
-                    local is_unnecessary = false
-                    if d.tags then
-                        for _, t in ipairs(d.tags) do
-                            if
-                                t == vim.lsp.protocol.DiagnosticTag.Unnecessary
-                            then
-                                is_unnecessary = true
-                                break
-                            end
-                        end
-                    end
-
-                    -- Drop only the "… is not accessed" / unnecessary hints
-                    if
-                        not (
-                            is_hint
-                            and is_unnecessary
-                            and msg:find('is not accessed', 1, true)
-                        )
-                    then
-                        table.insert(filtered, d)
-                    end
-                end
-                result.diagnostics = filtered
-            end
-            return orig(err, result, ctx, config)
-        end
-    end
-
     -- Ruff should not "steal" hover; Pyright is better for that.
     if client.name == 'ruff' then
         client.server_capabilities.hoverProvider = false

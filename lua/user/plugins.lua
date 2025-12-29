@@ -45,13 +45,14 @@ return packer.startup(function(use)
     use('nvim-tree/nvim-web-devicons')
     use('nvim-lualine/lualine.nvim')
     use('kyazdani42/nvim-tree.lua')
+    use('nvim-treesitter/nvim-treesitter')
+    use('folke/which-key.nvim')
+
     use({
-        'nvim-treesitter/nvim-treesitter',
-        run = function()
-            local ok, install = pcall(require, 'nvim-treesitter.install')
-            if ok then
-                install.update({ with_sync = true })()
-            end
+        'windwp/nvim-autopairs',
+        event = 'InsertEnter',
+        config = function()
+            require('nvim-autopairs').setup({})
         end,
     })
 
@@ -60,8 +61,8 @@ return packer.startup(function(use)
     use('Ferouk/bearded-nvim')
     use('joshdick/onedark.vim')
     use('sainnhe/everforest')
-    -- use("sar/extra-darkplus.nvim")
     use('michael-lehn/darkplus.nvim')
+    use('HiPhish/rainbow-delimiters.nvim')
 
     -- cmp plugins
     use('hrsh7th/nvim-cmp') -- The completion plugin

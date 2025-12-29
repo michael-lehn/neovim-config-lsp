@@ -10,6 +10,25 @@ ts.setup({
     indent = { enable = true },
 })
 
+vim.g.rainbow_delimiters = {
+    strategy = {
+        [''] = require('rainbow-delimiters').strategy['global'],
+    },
+    query = {
+        [''] = 'rainbow-delimiters',
+    },
+    highlight = {
+        'TSRainbowYellow',
+        'TSRainbowOrange',
+        'TSRainbowCoral',
+        'TSRainbowPink',
+        'TSRainbowRed',
+        'TSRainbowBlue',
+        'TSRainbowViolet',
+        'TSRainbowGreen',
+    },
+}
+
 vim.api.nvim_create_autocmd('FileType', {
     pattern = { 'python', 'c', 'cpp', 'lua' },
     callback = function()

@@ -20,24 +20,7 @@ vim.lsp.config('pyright', {
                 autoSearchPaths = true,
                 useLibraryCodeForTypes = true,
                 -- Let Ruff handle these:
-                diagnosticSeverityOverrides = {
-                    reportUndefinedVariable = 'none',
-                    reportUnusedImport = 'none',
-                    reportUnusedVariable = 'none',
-                    reportUnusedFunction = 'none',
-                    reportUnusedClass = 'none',
-                    reportUnusedExpression = 'none',
-                    reportUnusedCoroutine = 'none',
-                    reportUnusedParameter = 'none',
-
-                    reportUnaccessedImport = 'none',
-                    reportUnaccessedVariable = 'none',
-                    reportUnaccessedFunction = 'none',
-                    reportUnaccessedClass = 'none',
-
-                    -- Optional (Ruff does this too, but you may want pyright for env issues)
-                    reportMissingImports = 'none',
-                },
+                diagnosticSeverityOverrides = {},
             },
         },
     },
@@ -46,6 +29,11 @@ vim.lsp.config('pyright', {
 vim.lsp.config('ruff', {
     cmd = { 'ruff', 'server' },
     filetypes = { 'python' },
+    settings = {
+        lint = {
+            select = { 'E', 'F' },
+        },
+    },
     root_dir = function(fname)
         return vim.fs.root(fname, {
             'pyproject.toml',
