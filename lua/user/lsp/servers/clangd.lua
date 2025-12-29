@@ -1,5 +1,3 @@
--- lua/user/lsp/servers/clangd.lua
-
 vim.lsp.config('clangd', {
     cmd = {
         'clangd',
