@@ -9,3 +9,10 @@ ts.setup({
     highlight = { enable = true },
     indent = { enable = true },
 })
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'python', 'c', 'cpp', 'lua' },
+    callback = function()
+        vim.treesitter.start()
+    end,
+})
