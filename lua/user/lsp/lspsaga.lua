@@ -1,4 +1,10 @@
-require('lspsaga').setup({
+local lspsaga_status_ok, lspsaga = pcall(require, 'lspsaga')
+if not lspsaga_status_ok then
+    vim.notify("can not call 'lspsaga'")
+    return
+end
+
+lspsaga.setup({
     ui = { border = 'rounded' },
     lightbulb = { enable = false },
     symbol_in_winbar = { enable = false },
