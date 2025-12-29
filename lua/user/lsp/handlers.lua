@@ -197,20 +197,20 @@ function M.on_attach(client, bufnr)
             local fname = vim.api.nvim_buf_get_name(bufnr)
 
             -- --- 1) isort (stdin -> stdout)
-            local res_isort = vim.system(
-                { 'isort', '--filename', fname, '-' },
-                { stdin = input, text = true }
-            ):wait()
+            -- local res_isort = vim.system(
+            --     { 'isort', '--filename', fname, '-' },
+            --     { stdin = input, text = true }
+            -- ):wait()
 
-            if res_isort.code ~= 0 then
-                vim.notify(
-                    'isort failed:\n' .. (res_isort.stderr or ''),
-                    vim.log.levels.ERROR
-                )
-                return
-            end
+            -- if res_isort.code ~= 0 then
+            --     vim.notify(
+            --         'isort failed:\n' .. (res_isort.stderr or ''),
+            --         vim.log.levels.ERROR
+            --     )
+            --     return
+            -- end
 
-            input = res_isort.stdout or input
+            -- input = res_isort.stdout or input
 
             -- --- 2) black (stdin -> stdout)
             local res_black = vim.system(
