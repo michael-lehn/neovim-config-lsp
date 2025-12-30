@@ -59,8 +59,19 @@ require('lazy').setup({
         { 'hrsh7th/cmp-nvim-lua' },
 
         -- LSP tooling
-        { 'williamboman/mason.nvim' },
-        { 'williamboman/mason-lspconfig.nvim' },
+        {
+            'mason-org/mason.nvim',
+            opts = {
+                max_concurrent_installers = 14,
+                ui = {
+                    icons = {
+                        package_installed = '✓',
+                        package_pending = '➜',
+                        package_uninstalled = '✗',
+                    },
+                },
+            },
+        },
         { 'nvimtools/none-ls.nvim' },
         { 'nvimdev/lspsaga.nvim' },
     },
