@@ -1,35 +1,18 @@
-local ok, ts = pcall(require, 'nvim-treesitter.config')
-if not ok then
-    vim.notify('can not call nvim-treesitter.config')
-    return
-end
-
-ts.setup({
-    ensure_installed = { 'c', 'cpp', 'lua', 'python' },
-    highlight = { enable = true },
-    indent = { enable = true },
+require('nvim-treesitter').setup({
+    install_dir = vim.fn.stdpath('data') .. '/site',
 })
-vim.g.rainbow_delimiters = {
-    strategy = {
-        [''] = require('rainbow-delimiters').strategy['global'],
-    },
-    query = {
-        [''] = 'rainbow-delimiters',
-    },
-    highlight = {
-        'TSRainbowRed',
-        'TSRainbowYellow',
-        'TSRainbowOrange',
-        'TSRainbowCoral',
-        'TSRainbowViolet',
-        'TSRainbowBlue',
-        'TSRainbowPink',
-        'TSRainbowGreen',
-    },
-}
+
+require('nvim-treesitter')
+    .install({
+        'c',
+        'cpp',
+        'lua',
+        'python',
+    })
+    :wait(300000)
 
 vim.api.nvim_create_autocmd('FileType', {
-    pattern = { 'python', 'c', 'cpp', 'lua' },
+    pattern = { 'c', 'cpp', 'lua', 'python' },
     callback = function()
         vim.treesitter.start()
     end,
