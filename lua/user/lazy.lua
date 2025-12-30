@@ -81,7 +81,10 @@ require('lazy').setup({
                                 or theme.tab
 
                             local wins = tab.wins().foreach(function(win, i)
-                                if i > 2 then
+                                local buf = win.buf().id
+                                local ft = vim.bo[buf].filetype
+
+                                if ft == 'NvimTree' then
                                     return ''
                                 end
                                 return {
