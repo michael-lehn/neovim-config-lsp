@@ -31,9 +31,7 @@ require('lazy').setup({
             'folke/which-key.nvim',
             event = 'VeryLazy',
             opts = {
-                -- your configuration comes here
-                -- or leave it empty to use the default settings
-                -- refer to the configuration section below
+                delay = 700,
             },
             keys = {
                 {
@@ -50,13 +48,71 @@ require('lazy').setup({
             tag = 'v0.2.0',
             dependencies = { 'nvim-lua/plenary.nvim' },
         },
+        {
+            'ThePrimeagen/harpoon',
+            branch = 'harpoon2',
+            dependencies = { 'nvim-lua/plenary.nvim' },
+        },
         -- Treesitter
         {
             'nvim-treesitter/nvim-treesitter',
             lazy = false,
             build = ':TSUpdate',
         },
+        {
+            'nanozuki/tabby.nvim',
+            event = 'VimEnter', -- oder VeryLazy; VimEnter wirkt "sofort sauber"
+            dependencies = { 'nvim-tree/nvim-web-devicons' }, -- nur falls du Icons willst
+            opts = {
+                line = function(line)
+                    local theme = {
+                        fill = 'TabLineFill',
+                        head = 'TabLine',
+                        current_tab = 'TabLineSel',
+                        tab = 'TabLine',
+                    }
 
+                    return {
+                        { '  Tabs ', hl = theme.head },
+                        line.sep('', theme.head, theme.fill),
+
+                        line.tabs().foreach(function(tab)
+                            local hl = tab.is_current() and theme.current_tab
+                                or theme.tab
+
+                            local wins = tab.wins().foreach(function(win, i)
+                                if i > 2 then
+                                    return ''
+                                end
+                                return {
+                                    (i == 1) and ' ' or ' | ',
+                                    win.buf_name(),
+                                }
+                            end)
+
+                            return {
+                                line.sep('', hl, theme.fill),
+                                ' ',
+                                tab.number(),
+                                ':',
+                                wins,
+                                ' ',
+                                line.sep('', hl, theme.fill),
+                                hl = hl,
+                            }
+                        end),
+
+                        hl = theme.fill,
+                    }
+                end,
+
+                option = {
+                    buf_name = {
+                        mode = 'tail',
+                    },
+                },
+            },
+        },
         -- Autopairs
         {
             'windwp/nvim-autopairs',
