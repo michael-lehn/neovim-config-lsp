@@ -23,12 +23,6 @@ vim.keymap.set(
     builtin.buffers,
     { desc = 'Telescope: Buffers' }
 )
-vim.keymap.set(
-    'n',
-    '<leader>fh',
-    builtin.help_tags,
-    { desc = 'Telescope: Help tags' }
-)
 
 -- LSP
 vim.keymap.set(
