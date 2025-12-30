@@ -9,7 +9,6 @@ ts.setup({
     highlight = { enable = true },
     indent = { enable = true },
 })
-
 vim.g.rainbow_delimiters = {
     strategy = {
         [''] = require('rainbow-delimiters').strategy['global'],
