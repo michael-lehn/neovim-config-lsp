@@ -16,6 +16,9 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
     spec = {
+        rocks = {
+            enabled = false,
+        },
         -- Core deps
         { 'nvim-lua/plenary.nvim' },
         { 'nvim-lua/popup.nvim' },
