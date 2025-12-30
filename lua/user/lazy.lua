@@ -15,10 +15,10 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
+    rocks = {
+        enabled = false,
+    },
     spec = {
-        rocks = {
-            enabled = false,
-        },
         -- Core deps
         { 'nvim-lua/plenary.nvim' },
         { 'nvim-lua/popup.nvim' },
