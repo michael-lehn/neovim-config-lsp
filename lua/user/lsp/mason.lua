@@ -2,9 +2,29 @@
 -- Neovim's native LSP (0.11+) does the rest.
 
 local handlers = require('user.lsp.handlers')
-local registry = require('mason-registry')
+
+-- Ensure mason is loaded before we touch the registry.
+local ok_mason, mason = pcall(require, 'mason')
+if not ok_mason then
+    return
+end
+
+-- If you configure mason via lazy's `opts`, this is optional.
+-- But calling setup() twice is safe; mason will just reuse config.
+pcall(mason.setup, {}) -- keep empty; lazy 'opts' will already apply
+
+local ok_registry, registry = pcall(require, 'mason-registry')
+if not ok_registry then
+    return
+end
+
+local function strip_quotes(s)
+    -- removes accidental leading/trailing quotes
+    return (s:gsub('^%s*"(.*)"%s*$', '%1'):gsub("^%s*'(.*)'%s*$", '%1'))
+end
 
 local function want_mason_pkg(pkg_name, bin_name)
+    pkg_name = strip_quotes(pkg_name)
     if vim.fn.executable(bin_name) == 1 then
         return false
     end
@@ -13,6 +33,8 @@ end
 
 local function ensure_mason_pkgs(pkgs)
     for _, pkg in ipairs(pkgs) do
+        pkg = strip_quotes(pkg)
+
         local ok, p = pcall(registry.get_package, pkg)
         if ok and not p:is_installed() then
             p:install()
@@ -25,24 +47,18 @@ end
 -- -------------------------
 local ensure_lsp_pkgs = {}
 
--- Lua LSP:
--- lsp server name: lua_ls
--- mason package name: lua-language-server
 if want_mason_pkg('lua-language-server', 'lua-language-server') then
     table.insert(ensure_lsp_pkgs, 'lua-language-server')
 end
 
--- clangd:
 if want_mason_pkg('clangd', 'clangd') then
     table.insert(ensure_lsp_pkgs, 'clangd')
 end
 
--- pyright:
 if want_mason_pkg('pyright', 'pyright-langserver') then
     table.insert(ensure_lsp_pkgs, 'pyright')
 end
 
--- ruff (binary provides ruff-lsp mode / native LSP in ruff):
 if want_mason_pkg('ruff', 'ruff') then
     table.insert(ensure_lsp_pkgs, 'ruff')
 end
@@ -89,7 +105,6 @@ require('user.lsp.servers.lua_ls')
 require('user.lsp.servers.clangd')
 require('user.lsp.servers.python')
 
--- Enable servers (LSP SERVER names!)
 vim.lsp.enable('lua_ls')
 vim.lsp.enable('clangd')
 vim.lsp.enable('pyright')
