@@ -64,6 +64,7 @@ require('lazy').setup({
         -- LSP tooling
         {
             'mason-org/mason.nvim',
+            lazy = false,
             opts = {
                 max_concurrent_installers = 14,
                 ui = {
@@ -74,6 +75,10 @@ require('lazy').setup({
                     },
                 },
             },
+            config = function(_, opts)
+                require('mason').setup(opts)
+                require('user.lsp.mason') -- hier drin machen wir den Bootstrap
+            end,
         },
         { 'nvimtools/none-ls.nvim' },
         { 'nvimdev/lspsaga.nvim' },
