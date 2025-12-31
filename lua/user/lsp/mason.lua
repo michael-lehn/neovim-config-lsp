@@ -16,7 +16,6 @@ function M.bootstrap()
         { pkg = 'clang-format', exe = 'clang-format' },
         { pkg = 'black', exe = 'black' },
         { pkg = 'isort', exe = 'isort' },
-        { pkg = 'tree-sitter-cli', exe = 'tree-sitter' },
     }
 
     local function mason_pkg_installed(name)
