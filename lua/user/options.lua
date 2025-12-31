@@ -1,3 +1,6 @@
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
 local options = {
     colorcolumn = '81',
     backup = false, -- creates a backup file

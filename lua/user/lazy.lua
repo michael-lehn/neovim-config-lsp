@@ -15,24 +15,50 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
-    rocks = {
-        enabled = false,
-    },
-    spec = {
-        -- Core deps
-        { 'nvim-lua/plenary.nvim' },
-        { 'nvim-lua/popup.nvim' },
+    rocks = { enabled = false },
 
+    spec = {
+        -- ------------------------------------------------------------
+        -- Core deps
+        -- ------------------------------------------------------------
+        { 'nvim-lua/plenary.nvim', lazy = true },
+        { 'nvim-lua/popup.nvim', lazy = true },
+
+        -- ------------------------------------------------------------
+        -- Colorscheme
+        -- ------------------------------------------------------------
+        {
+            'michael-lehn/darkplus.nvim',
+            lazy = false,
+            priority = 1000,
+            config = function()
+                require('user.colorscheme')
+            end,
+        },
+
+        { 'oxidescheme/oxide.nvim', lazy = true },
+        { 'Ferouk/bearded-nvim', lazy = true },
+        { 'joshdick/onedark.vim', lazy = true },
+        { 'sainnhe/everforest', lazy = true },
+
+        -- ------------------------------------------------------------
         -- UI
-        { 'nvim-tree/nvim-web-devicons' },
-        { 'nvim-lualine/lualine.nvim' },
-        { 'nvim-tree/nvim-tree.lua' },
+        -- ------------------------------------------------------------
+        { 'nvim-tree/nvim-web-devicons', lazy = true },
+
+        {
+            'nvim-lualine/lualine.nvim',
+            event = 'VeryLazy',
+            dependencies = { 'nvim-tree/nvim-web-devicons' },
+            config = function()
+                require('user.lualine')
+            end,
+        },
+
         {
             'folke/which-key.nvim',
             event = 'VeryLazy',
-            opts = {
-                delay = 700,
-            },
+            opts = { delay = 700 },
             keys = {
                 {
                     '<leader>?',
@@ -43,26 +69,37 @@ require('lazy').setup({
                 },
             },
         },
+
         {
-            'nvim-telescope/telescope.nvim',
-            tag = 'v0.2.0',
-            dependencies = { 'nvim-lua/plenary.nvim' },
+            'nvim-tree/nvim-tree.lua',
+            cmd = {
+                'NvimTreeToggle',
+                'NvimTreeOpen',
+                'NvimTreeFocus',
+                'NvimTreeFindFile',
+            },
+            keys = {
+                {
+                    '<C-e>',
+                    function()
+                        require('nvim-tree.api').tree.find_file({
+                            open = true,
+                            focus = true,
+                        })
+                    end,
+                    desc = 'NvimTree: Reveal current file',
+                },
+            },
+            dependencies = { 'nvim-tree/nvim-web-devicons' },
+            config = function()
+                require('user.nvim-tree')
+            end,
         },
-        {
-            'ThePrimeagen/harpoon',
-            branch = 'harpoon2',
-            dependencies = { 'nvim-lua/plenary.nvim' },
-        },
-        -- Treesitter
-        {
-            'nvim-treesitter/nvim-treesitter',
-            lazy = false,
-            build = ':TSUpdate',
-        },
+
         {
             'nanozuki/tabby.nvim',
-            event = 'VimEnter', -- oder VeryLazy; VimEnter wirkt "sofort sauber"
-            dependencies = { 'nvim-tree/nvim-web-devicons' }, -- nur falls du Icons willst
+            event = 'VeryLazy',
+            dependencies = { 'nvim-tree/nvim-web-devicons' },
             opts = {
                 line = function(line)
                     local theme = {
@@ -83,7 +120,6 @@ require('lazy').setup({
                             local wins = tab.wins().foreach(function(win, i)
                                 local buf = win.buf().id
                                 local ft = vim.bo[buf].filetype
-
                                 if ft == 'NvimTree' then
                                     return ''
                                 end
@@ -110,13 +146,70 @@ require('lazy').setup({
                 end,
 
                 option = {
-                    buf_name = {
-                        mode = 'tail',
-                    },
+                    buf_name = { mode = 'tail' },
                 },
             },
         },
+
+        {
+            'nvim-lua/plenary.nvim',
+            event = 'VeryLazy',
+            config = function()
+                -- nur Keymaps, kein Plugin-Setup
+                pcall(require, 'user.tabby')
+            end,
+        },
+
+        -- ------------------------------------------------------------
+        -- Telescope / Harpoon
+        -- ------------------------------------------------------------
+        {
+            'nvim-telescope/telescope.nvim',
+            tag = 'v0.2.0',
+            cmd = 'Telescope',
+            dependencies = { 'nvim-lua/plenary.nvim' },
+            config = function()
+                require('user.telescope')
+            end,
+        },
+
+        {
+            'ThePrimeagen/harpoon',
+            branch = 'harpoon2',
+            dependencies = { 'nvim-lua/plenary.nvim' },
+            keys = {
+                { '<leader>ha', desc = 'Harpoon: Add file' },
+                { '<leader>H', desc = 'Harpoon: Quick menu' },
+                { '<leader>h1', desc = 'Harpoon: Go to 1' },
+                { '<leader>h2', desc = 'Harpoon: Go to 2' },
+                { '<leader>h3', desc = 'Harpoon: Go to 3' },
+                { '<leader>h4', desc = 'Harpoon: Go to 4' },
+            },
+            config = function()
+                require('user.harpoon')
+            end,
+        },
+
+        -- ------------------------------------------------------------
+        -- Treesitter
+        -- ------------------------------------------------------------
+        {
+            'nvim-treesitter/nvim-treesitter',
+            lazy = false,
+            build = ':TSUpdate',
+            priority = 900,
+            config = function()
+                require('user.treesitter')
+            end,
+        },
+
+        {
+            'HiPhish/rainbow-delimiters.nvim',
+        },
+
+        -- ------------------------------------------------------------
         -- Autopairs
+        -- ------------------------------------------------------------
         {
             'windwp/nvim-autopairs',
             event = 'InsertEnter',
@@ -125,26 +218,36 @@ require('lazy').setup({
             end,
         },
 
-        -- Colorschemes
-        { 'oxidescheme/oxide.nvim' },
-        { 'Ferouk/bearded-nvim' },
-        { 'joshdick/onedark.vim' },
-        { 'sainnhe/everforest' },
-        { 'michael-lehn/darkplus.nvim' },
-        { 'HiPhish/rainbow-delimiters.nvim' },
-
+        -- ------------------------------------------------------------
         -- CMP
-        { 'hrsh7th/nvim-cmp', event = 'InsertEnter' },
-        { 'hrsh7th/cmp-buffer', event = 'InsertEnter' },
-        { 'hrsh7th/cmp-path', event = 'InsertEnter' },
-        { 'hrsh7th/cmp-cmdline' },
-        { 'hrsh7th/cmp-nvim-lsp' },
-        { 'hrsh7th/cmp-nvim-lua' },
+        -- ------------------------------------------------------------
+        {
+            'hrsh7th/nvim-cmp',
+            event = 'InsertEnter',
+            dependencies = {
+                { 'hrsh7th/cmp-buffer', event = 'InsertEnter' },
+                { 'hrsh7th/cmp-path', event = 'InsertEnter' },
+                { 'hrsh7th/cmp-cmdline' }, -- kann lazy bleiben
+                { 'hrsh7th/cmp-nvim-lsp' },
+                { 'hrsh7th/cmp-nvim-lua' },
+            },
+            config = function()
+                require('user.cmp')
+            end,
+        },
 
-        -- LSP tooling
+        -- ------------------------------------------------------------
+        -- LSP (native) + LSPSaga + Mason
+        -- ------------------------------------------------------------
+        {
+            'nvimdev/lspsaga.nvim',
+            event = { 'BufReadPre', 'BufNewFile' },
+            config = function() end,
+        },
+
         {
             'mason-org/mason.nvim',
-            lazy = false,
+            event = 'VeryLazy',
             opts = {
                 max_concurrent_installers = 14,
                 ui = {
@@ -157,12 +260,24 @@ require('lazy').setup({
             },
             config = function(_, opts)
                 require('mason').setup(opts)
-                require('user.lsp.mason') -- hier drin machen wir den Bootstrap
+                require('user.lsp.mason').bootstrap()
             end,
         },
-        { 'nvimtools/none-ls.nvim' },
-        { 'nvimdev/lspsaga.nvim' },
+
+        { 'nvimtools/none-ls.nvim', event = 'VeryLazy' },
+
+        {
+            'neovim/nvim-lspconfig',
+            event = 'VeryLazy',
+            dependencies = {
+                'nvimdev/lspsaga.nvim',
+            },
+            config = function()
+                require('user.lsp')
+            end,
+        },
     },
 
-    defaults = { lazy = false },
+    defaults = { lazy = true },
+    install = { colorscheme = { 'darkplus' } },
 })

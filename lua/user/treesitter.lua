@@ -32,7 +32,9 @@ vim.g.rainbow_delimiters = {
 
 vim.api.nvim_create_autocmd('FileType', {
     pattern = { 'c', 'cpp', 'lua', 'python' },
-    callback = function()
-        vim.treesitter.start()
+    callback = function(ev)
+        vim.schedule(function()
+            pcall(vim.treesitter.start, ev.buf) -- start nach dem ersten Render-Tick
+        end)
     end,
 })
