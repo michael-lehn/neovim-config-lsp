@@ -155,7 +155,6 @@ require('lazy').setup({
             'nvim-lua/plenary.nvim',
             event = 'VeryLazy',
             config = function()
-                -- nur Keymaps, kein Plugin-Setup
                 pcall(require, 'user.tabby')
             end,
         },
@@ -191,23 +190,6 @@ require('lazy').setup({
         },
 
         -- ------------------------------------------------------------
-        -- Treesitter
-        -- ------------------------------------------------------------
-        {
-            'nvim-treesitter/nvim-treesitter',
-            lazy = false,
-            build = ':TSUpdate',
-            priority = 900,
-            config = function()
-                require('user.treesitter')
-            end,
-        },
-
-        {
-            'HiPhish/rainbow-delimiters.nvim',
-        },
-
-        -- ------------------------------------------------------------
         -- Autopairs
         -- ------------------------------------------------------------
         {
@@ -227,7 +209,7 @@ require('lazy').setup({
             dependencies = {
                 { 'hrsh7th/cmp-buffer', event = 'InsertEnter' },
                 { 'hrsh7th/cmp-path', event = 'InsertEnter' },
-                { 'hrsh7th/cmp-cmdline' }, -- kann lazy bleiben
+                { 'hrsh7th/cmp-cmdline' },
                 { 'hrsh7th/cmp-nvim-lsp' },
                 { 'hrsh7th/cmp-nvim-lua' },
             },
