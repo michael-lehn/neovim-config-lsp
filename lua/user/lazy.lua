@@ -157,14 +157,6 @@ require('lazy').setup({
             },
         },
 
-        {
-            'nvim-lua/plenary.nvim',
-            event = 'VeryLazy',
-            config = function()
-                pcall(require, 'user.tabby')
-            end,
-        },
-
         -- ------------------------------------------------------------
         -- Telescope / Harpoon
         -- ------------------------------------------------------------

@@ -7,6 +7,7 @@ vim.api.nvim_create_autocmd('ColorScheme', {
 })
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
+vim.opt.shadafile = 'NONE'
 
 local options = {
     colorcolumn = '81',
