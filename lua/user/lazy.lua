@@ -21,7 +21,13 @@ require('lazy').setup({
         -- ------------------------------------------------------------
         -- Core deps
         -- ------------------------------------------------------------
-        { 'nvim-lua/plenary.nvim', lazy = true },
+        {
+            'nvim-lua/plenary.nvim',
+            event = 'VeryLazy',
+            config = function()
+                pcall(require, 'user.tabby')
+            end,
+        },
         { 'nvim-lua/popup.nvim', lazy = true },
 
         -- ------------------------------------------------------------
@@ -170,6 +176,80 @@ require('lazy').setup({
             config = function()
                 require('user.telescope')
             end,
+            keys = {
+                {
+                    '<leader>ff',
+                    function()
+                        require('telescope.builtin').find_files()
+                    end,
+                    desc = 'Telescope: Find files',
+                },
+                {
+                    '<leader>fg',
+                    function()
+                        require('telescope.builtin').live_grep()
+                    end,
+                    desc = 'Telescope: Live grep',
+                },
+                {
+                    '<leader>fb',
+                    function()
+                        require('telescope.builtin').buffers()
+                    end,
+                    desc = 'Telescope: Buffers',
+                },
+
+                {
+                    'gd',
+                    function()
+                        require('telescope.builtin').lsp_definitions()
+                    end,
+                    desc = 'LSP: Go to definition (Telescope)',
+                },
+                {
+                    'gr',
+                    function()
+                        require('telescope.builtin').lsp_references()
+                    end,
+                    desc = 'LSP: References (Telescope)',
+                },
+                {
+                    'gi',
+                    function()
+                        require('telescope.builtin').lsp_implementations()
+                    end,
+                    desc = 'LSP: Implementations (Telescope)',
+                },
+                {
+                    '<leader>ds',
+                    function()
+                        require('telescope.builtin').lsp_document_symbols()
+                    end,
+                    desc = 'LSP: Document symbols (Telescope)',
+                },
+                {
+                    '<leader>ws',
+                    function()
+                        require('telescope.builtin').lsp_workspace_symbols()
+                    end,
+                    desc = 'LSP: Workspace symbols (Telescope)',
+                },
+
+                {
+                    '<leader>gc',
+                    function()
+                        require('telescope.builtin').git_commits()
+                    end,
+                    desc = 'Git: Commit history (Telescope)',
+                },
+                {
+                    '<leader>gs',
+                    function()
+                        require('telescope.builtin').git_status()
+                    end,
+                    desc = 'Git: Status (Telescope)',
+                },
+            },
         },
 
         {

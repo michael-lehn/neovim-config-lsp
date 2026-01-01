@@ -1,60 +1,61 @@
-local opts = { noremap = true, silent = true }
-
-local term_opts = { silent = true }
-
--- Shorten function name
-local keymap = vim.api.nvim_set_keymap
-
---Remap space as leader key
-keymap('', '<Space>', '<Nop>', opts)
+-- Remap <Space> as leader key (must be set early)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
--- Modes
---   normal_mode = "n",
---   insert_mode = "i",
---   visual_mode = "v",
---   visual_block_mode = "x",
---   term_mode = "t",
---   command_mode = "c",
+local map = vim.keymap.set
+local opts = { noremap = true, silent = true }
 
--- Normal --
+-- Disable Space in normal/visual/etc. so it can be leader
+map({ 'n', 'v', 'x', 'o' }, '<Space>', '<Nop>', opts)
+
+-- ------------------------------------------------------------
+-- Normal mode
+-- ------------------------------------------------------------
+
 -- Better window navigation
-keymap('n', '<C-Left>', '<C-w>h', opts)
-keymap('n', '<C-Down>', '<C-w>j', opts)
-keymap('n', '<C-Up>', '<C-w>k', opts)
-keymap('n', '<C-Right>', '<C-w>l', opts)
-keymap('n', '<C-h>', '<C-w>h', opts)
-keymap('n', '<C-j>', '<C-w>j', opts)
-keymap('n', '<C-k>', '<C-w>k', opts)
-keymap('n', '<C-l>', '<C-w>l', opts)
-keymap('n', '<S-Left>', 'gT', opts)
-keymap('n', '<S-Right>', 'gt', opts)
-keymap('n', '<S-h>', 'gT', opts)
-keymap('n', '<S-l>', 'gt', opts)
+map('n', '<C-Left>', '<C-w>h', opts)
+map('n', '<C-Down>', '<C-w>j', opts)
+map('n', '<C-Up>', '<C-w>k', opts)
+map('n', '<C-Right>', '<C-w>l', opts)
 
--- Navigate buffers
-keymap('n', '<S-Up>', ':bprevious<CR>', opts)
-keymap('n', '<S-Down>', ':bnext<CR>', opts)
+map('n', '<C-h>', '<C-w>h', opts)
+map('n', '<C-j>', '<C-w>j', opts)
+map('n', '<C-k>', '<C-w>k', opts)
+map('n', '<C-l>', '<C-w>l', opts)
 
--- hide last search
-keymap('n', '<Esc>', ':noh<cr>', opts)
+-- Tab navigation
+map('n', '<S-Left>', 'gT', opts)
+map('n', '<S-Right>', 'gt', opts)
+map('n', '<S-h>', 'gT', opts)
+map('n', '<S-l>', 'gt', opts)
 
-keymap('n', '<leader>e', ':NvimTreeToggle<cr>', opts)
+-- Buffer navigation
+map('n', '<S-Up>', ':bprevious<CR>', opts)
+map('n', '<S-Down>', ':bnext<CR>', opts)
 
--- Insert --
+-- Hide last search highlight
+map('n', '<Esc>', ':nohlsearch<CR>', opts)
 
--- Visual --
+-- NvimTree
+map('n', '<leader>e', ':NvimTreeToggle<CR>', opts)
+
+-- ------------------------------------------------------------
+-- Visual mode
+-- ------------------------------------------------------------
+
 -- Stay in indent mode
-keymap('v', '<', '<gv', opts)
-keymap('v', '>', '>gv', opts)
+map('v', '<', '<gv', opts)
+map('v', '>', '>gv', opts)
 
--- Move text up and down
-keymap('v', 'p', '"_dP', opts)
-keymap('v', '<J>', ':m .+1<CR>==', opts)
-keymap('v', '<K>', ':m .-2<CR>==', opts)
+-- Paste without yanking replaced text
+map('v', 'p', '"_dP', opts)
 
--- Visual Block --
--- Move text up and down
-keymap('x', 'J', ":move '>+1<CR>gv-gv", opts)
-keymap('x', 'K', ":move '<-2<CR>gv-gv", opts)
+-- Move selected text up/down (visual)
+map('v', '<J>', ":m '>+1<CR>==", opts)
+map('v', '<K>', ":m '<-2<CR>==", opts)
+
+-- ------------------------------------------------------------
+-- Visual block mode
+-- ------------------------------------------------------------
+map('x', 'J', ":move '>+1<CR>gv-gv", opts)
+map('x', 'K', ":move '<-2<CR>gv-gv", opts)
