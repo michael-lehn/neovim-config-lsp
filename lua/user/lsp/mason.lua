@@ -15,7 +15,6 @@ function M.bootstrap()
         { pkg = 'stylua', exe = 'stylua' },
         { pkg = 'clang-format', exe = 'clang-format' },
         { pkg = 'black', exe = 'black' },
-        { pkg = 'isort', exe = 'isort' },
     }
 
     local function mason_pkg_installed(name)

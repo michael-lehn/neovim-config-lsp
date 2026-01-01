@@ -28,8 +28,38 @@ require('lazy').setup({
                 pcall(require, 'user.tabby')
             end,
         },
-        { 'nvim-lua/popup.nvim', lazy = true },
-
+        {
+            'nvim-lua/popup.nvim',
+            lazy = true,
+        },
+        {
+            'nvim-treesitter/nvim-treesitter',
+            lazy = false,
+            build = ':TSUpdate',
+        },
+        {
+            'HiPhish/rainbow-delimiters.nvim',
+            event = 'BufReadPost',
+            config = function()
+                require('rainbow-delimiters.setup').setup({
+                    strategy = {
+                        [''] = 'rainbow-delimiters.strategy.global',
+                    },
+                    query = {
+                        [''] = 'rainbow-delimiters',
+                    },
+                    highlight = {
+                        'RainbowDelimiterRed',
+                        'RainbowDelimiterYellow',
+                        'RainbowDelimiterBlue',
+                        'RainbowDelimiterOrange',
+                        'RainbowDelimiterGreen',
+                        'RainbowDelimiterViolet',
+                        'RainbowDelimiterCyan',
+                    },
+                })
+            end,
+        },
         -- ------------------------------------------------------------
         -- Colorscheme
         -- ------------------------------------------------------------

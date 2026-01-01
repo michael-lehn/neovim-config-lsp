@@ -40,14 +40,6 @@ vim.api.nvim_create_user_command('Format', function()
 
     if vim.bo[bufnr].filetype == 'python' then
         -- --- tools check
-        if vim.fn.executable('isort') == 0 then
-            vim.notify(
-                'isort not found. Install via pipx/pip/brew (recommended)'
-                    .. ' or Mason if you use it',
-                vim.log.levels.ERROR
-            )
-            return
-        end
         if vim.fn.executable('black') == 0 then
             vim.notify(
                 'black not found. Install via pipx/pip/brew (recommended)'
@@ -63,23 +55,6 @@ vim.api.nvim_create_user_command('Format', function()
         local input = table.concat(lines, '\n')
         local fname = vim.api.nvim_buf_get_name(bufnr)
 
-        -- --- 1) isort (stdin -> stdout)
-        -- local res_isort = vim.system(
-        --     { 'isort', '--filename', fname, '-' },
-        --     { stdin = input, text = true }
-        -- ):wait()
-
-        -- if res_isort.code ~= 0 then
-        --     vim.notify(
-        --         'isort failed:\n' .. (res_isort.stderr or ''),
-        --         vim.log.levels.ERROR
-        --     )
-        --     return
-        -- end
-
-        -- input = res_isort.stdout or input
-
-        -- --- 2) black (stdin -> stdout)
         local res_black = vim.system(
             { 'black', '--quiet', '--stdin-filename', fname, '-' },
             { stdin = input, text = true }

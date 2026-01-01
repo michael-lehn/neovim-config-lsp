@@ -8,3 +8,16 @@ require('user.options')
 require('user.keymaps')
 require('user.lazy')
 require('user.format')
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'c', 'cpp', 'lua', 'python' },
+    callback = function(args)
+        vim.schedule(function()
+            require('nvim-treesitter')
+                .install({ 'c', 'cpp', 'lua', 'python' })
+                :wait(300000)
+            local ft = vim.bo[args.buf].filetype
+            pcall(vim.treesitter.start, args.buf, ft)
+        end)
+    end,
+})
