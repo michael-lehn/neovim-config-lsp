@@ -291,9 +291,12 @@ require('lazy').setup({
                 { 'hrsh7th/cmp-path', event = 'InsertEnter' },
                 { 'hrsh7th/cmp-cmdline' },
                 { 'hrsh7th/cmp-nvim-lua' },
+                { 'hrsh7th/cmp-nvim-lsp' },
             },
             config = function()
                 require('user.cmp')
+                local caps = vim.lsp.protocol.make_client_capabilities()
+                caps = require('cmp_nvim_lsp').default_capabilities(caps)
             end,
         },
 
