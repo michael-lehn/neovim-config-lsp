@@ -1,3 +1,13 @@
+vim.cmd('syntax on')
+vim.cmd('filetype plugin indent on')
+vim.api.nvim_create_autocmd('ColorScheme', {
+    callback = function()
+        vim.api.nvim_set_hl(0, 'Statement', { link = 'Keyword' })
+        vim.api.nvim_set_hl(0, 'Conditional', { link = 'Keyword' })
+        vim.api.nvim_set_hl(0, 'Repeat', { link = 'Keyword' })
+    end,
+})
+vim.cmd('doautocmd ColorScheme')
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
