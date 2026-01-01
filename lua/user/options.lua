@@ -1,5 +1,4 @@
 vim.cmd('syntax on')
-vim.cmd('filetype plugin indent on')
 vim.api.nvim_create_autocmd('ColorScheme', {
     callback = function()
         vim.api.nvim_set_hl(0, 'Statement', { link = 'Keyword' })

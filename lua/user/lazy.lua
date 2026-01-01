@@ -210,7 +210,6 @@ require('lazy').setup({
                 { 'hrsh7th/cmp-buffer', event = 'InsertEnter' },
                 { 'hrsh7th/cmp-path', event = 'InsertEnter' },
                 { 'hrsh7th/cmp-cmdline' },
-                { 'hrsh7th/cmp-nvim-lsp' },
                 { 'hrsh7th/cmp-nvim-lua' },
             },
             config = function()
@@ -224,9 +223,10 @@ require('lazy').setup({
         {
             'nvimdev/lspsaga.nvim',
             event = { 'BufReadPre', 'BufNewFile' },
-            config = function() end,
+            config = function()
+                require('user.lsp')
+            end,
         },
-
         {
             'mason-org/mason.nvim',
             event = 'VeryLazy',
@@ -247,17 +247,6 @@ require('lazy').setup({
         },
 
         { 'nvimtools/none-ls.nvim', event = 'VeryLazy' },
-
-        {
-            'neovim/nvim-lspconfig',
-            event = 'VeryLazy',
-            dependencies = {
-                'nvimdev/lspsaga.nvim',
-            },
-            config = function()
-                require('user.lsp')
-            end,
-        },
     },
 
     defaults = { lazy = true },

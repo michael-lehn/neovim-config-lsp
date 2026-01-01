@@ -49,75 +49,58 @@ vim.lsp.config('ruff', {
 })
 
 -- ---------------------------------------------------------------------
--- Start pyright reliably for Python buffers (no vim.lsp.enable needed)
+-- Start pyright/ruff reliably for Python buffers
 -- ---------------------------------------------------------------------
+local group = vim.api.nvim_create_augroup('UserPythonLsp', { clear = true })
+
 vim.api.nvim_create_autocmd('FileType', {
+    group = group,
     pattern = 'python',
     callback = function(args)
-        local have_pyright = false
-        local have_ruff = false
-
-        for _, c in ipairs(vim.lsp.get_clients({ bufnr = args.buf })) do
-            if c.name == 'pyright' then
-                have_pyright = true
-            elseif c.name == 'ruff' then
-                have_ruff = true
-            end
+        -- run once per buffer, even if FileType triggers again
+        if vim.b[args.buf].user_python_lsp_started then
+            return
         end
+        vim.b[args.buf].user_python_lsp_started = true
 
         local fname = vim.api.nvim_buf_get_name(args.buf)
 
-        -- -------------------------
-        -- Start pyright (if needed)
-        -- -------------------------
-        if not have_pyright then
-            if vim.fn.executable('pyright-langserver') == 0 then
+        local function compute_root(cfg)
+            local root = (type(cfg.root_dir) == 'function')
+                    and cfg.root_dir(fname)
+                or cfg.root_dir
+            if not root or root == '' then
+                root = vim.fn.getcwd()
+            end
+            return root
+        end
+
+        local function ensure_client(name, cmd_check)
+            for _, c in ipairs(vim.lsp.get_clients({ bufnr = args.buf })) do
+                if c.name == name then
+                    return
+                end
+            end
+
+            if vim.fn.executable(cmd_check) == 0 then
                 vim.notify(
-                    'pyright-langserver not found in PATH',
+                    cmd_check .. ' not found in PATH',
                     vim.log.levels.WARN
                 )
-            else
-                local cfg = vim.deepcopy(vim.lsp.config.pyright)
-
-                local root = type(cfg.root_dir) == 'function'
-                        and cfg.root_dir(fname)
-                    or cfg.root_dir
-                if not root or root == '' then
-                    root = vim.fn.getcwd()
-                end
-
-                cfg.root_dir = root
-                cfg.workspace_folders = {
-                    { name = root, uri = vim.uri_from_fname(root) },
-                }
-
-                vim.lsp.start(cfg, { bufnr = args.buf })
+                return
             end
+
+            local cfg = vim.deepcopy(vim.lsp.config[name])
+            local root = compute_root(cfg)
+
+            cfg.root_dir = root
+            cfg.workspace_folders =
+                { { name = root, uri = vim.uri_from_fname(root) } }
+
+            vim.lsp.start(cfg, { bufnr = args.buf })
         end
 
-        -- -------------------------
-        -- Start ruff (if needed)
-        -- -------------------------
-        if not have_ruff then
-            if vim.fn.executable('ruff') == 0 then
-                vim.notify('ruff not found in PATH', vim.log.levels.WARN)
-            else
-                local cfg = vim.deepcopy(vim.lsp.config.ruff)
-
-                local root = type(cfg.root_dir) == 'function'
-                        and cfg.root_dir(fname)
-                    or cfg.root_dir
-                if not root or root == '' then
-                    root = vim.fn.getcwd()
-                end
-
-                cfg.root_dir = root
-                cfg.workspace_folders = {
-                    { name = root, uri = vim.uri_from_fname(root) },
-                }
-
-                vim.lsp.start(cfg, { bufnr = args.buf })
-            end
-        end
+        ensure_client('pyright', 'pyright-langserver')
+        ensure_client('ruff', 'ruff')
     end,
 })
