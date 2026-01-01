@@ -298,13 +298,20 @@ require('lazy').setup({
         },
 
         -- ------------------------------------------------------------
-        -- LSP (native) + LSPSaga + Mason
+        -- LSP + LSPSaga + Mason
         -- ------------------------------------------------------------
         {
-            'nvimdev/lspsaga.nvim',
+            'neovim/nvim-lspconfig',
             event = { 'BufReadPre', 'BufNewFile' },
             config = function()
                 require('user.lsp')
+            end,
+        },
+        {
+            'nvimdev/lspsaga.nvim',
+            event = 'LspAttach',
+            config = function()
+                require('user.lsp.lspsaga')
             end,
         },
         {

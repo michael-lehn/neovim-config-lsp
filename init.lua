@@ -6,3 +6,4 @@ vim.g.loaded_perl_provider = 0
 require('user.options')
 require('user.keymaps')
 require('user.lazy')
+require('user.format')
