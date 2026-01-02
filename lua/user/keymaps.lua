@@ -59,3 +59,22 @@ map('v', '<K>', ":m '<-2<CR>==", opts)
 -- ------------------------------------------------------------
 map('x', 'J', ":move '>+1<CR>gv-gv", opts)
 map('x', 'K', ":move '<-2<CR>gv-gv", opts)
+
+-- ------------------------------------------------------------
+-- Insert mode
+-- ------------------------------------------------------------
+--
+-- Better window navigation
+map('i', '<C-Left>', '<Esc><C-w>h', opts)
+map('i', '<C-Down>', '<Esc><C-w>j', opts)
+map('i', '<C-Up>', '<Esc><C-w>k', opts)
+map('i', '<C-Right>', '<Esc><C-w>l', opts)
+
+map('i', '<C-h>', '<Esc><C-w>h', opts)
+map('i', '<C-j>', '<Esc><C-w>j', opts)
+map('i', '<C-k>', '<Esc><C-w>k', opts)
+map('i', '<C-l>', '<Esc><C-w>l', opts)
+
+-- Tab navigation
+map('i', '<S-Left>', '<Esc>gT', opts)
+map('i', '<S-Right>', '<Esc>gt', opts)
