@@ -17,7 +17,10 @@ vim.api.nvim_create_autocmd('FileType', {
                 .install({ 'c', 'cpp', 'lua', 'python' })
                 :wait(300000)
             local ft = vim.bo[args.buf].filetype
-            pcall(vim.treesitter.start, args.buf, ft)
+            local ft = vim.bo[args.buf].filetype
+            local ft2lang = {}
+            local lang = ft2lang[ft] or ft
+            pcall(vim.treesitter.start, args.buf, lang)
         end)
     end,
 })

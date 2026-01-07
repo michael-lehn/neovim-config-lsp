@@ -82,6 +82,40 @@ require('lazy').setup({
                 mappings = true,
             },
         },
+        {
+            'lervag/vimtex',
+            event = { 'BufReadPre *.tex', 'BufNewFile *.tex' },
+            ft = { 'tex' },
+            init = function()
+                vim.g.vimtex_quickfix_mode = 2
+                vim.g.vimtex_quickfix_open_on_warning = 0
+                vim.g.tex_flavor = 'latex'
+
+                vim.g.vimtex_compiler_method = 'latexmk'
+                vim.g.vimtex_compiler_latexmk_engines = {
+                    _ = '-lualatex',
+                }
+
+                vim.g.vimtex_compiler_latexmk = {
+                    continuous = 0,
+                    callback = 1,
+                    options = {
+                        '-synctex=1',
+                        '-interaction=nonstopmode',
+                        '-file-line-error',
+                    },
+                }
+                local sys = vim.loop.os_uname().sysname
+                if sys == 'Darwin' then
+                    vim.g.vimtex_view_method = 'skim'
+                elseif sys == 'Linux' then
+                    vim.g.vimtex_view_method = 'okular'
+                else
+                    vim.g.vimtex_view_method = 'general'
+                    vim.g.vimtex_view_general_viewer = 'open'
+                end
+            end,
+        },
         -- ------------------------------------------------------------
         -- Colorscheme
         -- ------------------------------------------------------------
