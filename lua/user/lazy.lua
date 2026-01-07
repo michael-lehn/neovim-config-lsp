@@ -109,11 +109,11 @@ require('lazy').setup({
                 if sys == 'Darwin' then
                     vim.g.vimtex_view_method = 'skim'
                 elseif sys == 'Linux' then
-                    vim.g.vimtex_view_method = 'general'
                     vim.g.vimtex_view_general_viewer = 'okular'
                     vim.g.vimtex_view_general_options =
                         '--unique file:@pdf\\#src:@line@tex'
-                    vim.g.vimtex_view_general_options_latexmk = '--unique'
+                    vim.g.tex_flavor = 'latex'
+                    vim.g.vimtex_compiler_progname = 'nvr'
                 else
                     vim.g.vimtex_view_method = 'general'
                     vim.g.vimtex_view_general_viewer = 'open'
