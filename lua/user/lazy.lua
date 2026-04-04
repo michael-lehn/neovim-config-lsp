@@ -37,29 +37,33 @@ require('lazy').setup({
             lazy = false,
             build = ':TSUpdate',
         },
-        {
-            'HiPhish/rainbow-delimiters.nvim',
-            event = 'BufReadPost',
-            config = function()
-                require('rainbow-delimiters.setup').setup({
-                    strategy = {
-                        [''] = 'rainbow-delimiters.strategy.global',
-                    },
-                    query = {
-                        [''] = 'rainbow-delimiters',
-                    },
-                    highlight = {
-                        'RainbowDelimiterRed',
-                        'RainbowDelimiterYellow',
-                        'RainbowDelimiterBlue',
-                        'RainbowDelimiterOrange',
-                        'RainbowDelimiterGreen',
-                        'RainbowDelimiterViolet',
-                        'RainbowDelimiterCyan',
-                    },
-                })
-            end,
-        },
+        -- {
+        --     'HiPhish/rainbow-delimiters.nvim',
+        --     event = 'BufReadPost',
+        --     config = function()
+        --         require('rainbow-delimiters.setup').setup({
+        --             strategy = {
+        --                 [''] = 'rainbow-delimiters.strategy.global',
+        --             },
+        --             query = {
+        --                 [''] = 'rainbow-delimiters',
+        --             },
+        --             highlight = {
+        --                 'RainbowDelimiterRed',
+        --                 'RainbowDelimiterYellow',
+        --                 'RainbowDelimiterBlue',
+        --                 'RainbowDelimiterOrange',
+        --                 'RainbowDelimiterGreen',
+        --                 'RainbowDelimiterViolet',
+        --                 'RainbowDelimiterCyan',
+        --             },
+        --         })
+        --     end,
+        --     condition = function(bufnr)
+        --         local ok, parser = pcall(vim.treesitter.get_parser, bufnr)
+        --         return ok and parser ~= nil
+        --     end,
+        -- },
         {
             'Julian/lean.nvim',
             event = { 'BufReadPre *.lean', 'BufNewFile *.lean' },

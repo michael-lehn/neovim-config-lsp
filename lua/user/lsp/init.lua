@@ -21,14 +21,59 @@ vim.diagnostic.config({
     },
 })
 
-vim.api.nvim_create_autocmd('VimEnter', {
-    once = true,
-    callback = function()
-        vim.lsp.enable('lua_ls')
-        vim.lsp.enable('clangd')
-        vim.lsp.enable('pyright')
-        vim.lsp.enable('ruff')
+local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-        vim.cmd('doautoall FileType')
+vim.lsp.config('clangd', {
+    capabilities = capabilities,
+    root_dir = function(bufnr, on_dir)
+        local fname = vim.api.nvim_buf_get_name(bufnr)
+        local root = vim.fs.root(fname, {
+            '.clangd',
+            'compile_commands.json',
+            'compile_flags.txt',
+            '.git',
+        })
+        on_dir(root or vim.fs.dirname(fname))
+    end,
+})
+
+vim.lsp.config('lua_ls', {
+    capabilities = capabilities,
+})
+
+vim.lsp.config('pyright', {
+    capabilities = capabilities,
+})
+
+vim.lsp.config('ruff', {
+    capabilities = capabilities,
+})
+
+local ft_to_server = {
+    c = 'clangd',
+    cpp = 'clangd',
+    lua = 'lua_ls',
+    python = 'pyright',
+}
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = { 'c', 'cpp', 'lua', 'python' },
+    callback = function(args)
+        local ft = vim.bo[args.buf].filetype
+        local server = ft_to_server[ft]
+        if not server then
+            return
+        end
+
+        local cfg = vim.lsp.config[server]
+        if not cfg then
+            vim.notify(
+                'No LSP config found for ' .. server,
+                vim.log.levels.ERROR
+            )
+            return
+        end
+
+        vim.lsp.start(cfg, { bufnr = args.buf })
     end,
 })
