@@ -62,3 +62,18 @@ vim.cmd('set whichwrap+=<,>,[,],h,l')
 -- This affects motions like 'w', 'b', text objects like 'ciw',
 -- and commands such as '*' or word-based completion.
 vim.cmd([[set iskeyword+=-]])
+
+if vim.fn.has('wsl') == 1 then
+    vim.g.clipboard = {
+        name = 'WslClipboard',
+        copy = {
+            ['+'] = 'clip.exe',
+            ['*'] = 'clip.exe',
+        },
+        paste = {
+            ['+'] = 'powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).ToString().Replace("`r", ""))',
+            ['*'] = 'powershell.exe -NoLogo -NoProfile -c [Console]::Out.Write($(Get-Clipboard -Raw).ToString().Replace("`r", ""))',
+        },
+        cache_enabled = 0,
+    }
+end
