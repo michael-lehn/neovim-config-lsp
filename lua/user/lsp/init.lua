@@ -28,5 +28,7 @@ vim.api.nvim_create_autocmd('VimEnter', {
         vim.lsp.enable('clangd')
         vim.lsp.enable('pyright')
         vim.lsp.enable('ruff')
+
+        vim.cmd('doautoall FileType')
     end,
 })
