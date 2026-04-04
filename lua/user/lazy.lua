@@ -388,8 +388,8 @@ require('lazy').setup({
         -- ------------------------------------------------------------
         {
             'neovim/nvim-lspconfig',
-            -- event = { 'BufReadPre', 'BufNewFile' },
-            lazy = false,
+            event = { 'BufReadPre', 'BufNewFile' },
+            -- lazy = false,
             config = function()
                 require('user.lsp')
             end,
