@@ -12,6 +12,10 @@ map({ 'n', 'v', 'x', 'o' }, '<Space>', '<Nop>', opts)
 -- Normal mode
 -- ------------------------------------------------------------
 
+-- Signature help
+map('n', '<leader>s', vim.lsp.buf.signature_help, opts)
+map('i', '<C-s>', vim.lsp.buf.signature_help, opts)
+
 -- Better window navigation
 map('n', '<C-Left>', '<C-w>h', opts)
 map('n', '<C-Down>', '<C-w>j', opts)

@@ -378,7 +378,7 @@ require('lazy').setup({
                 { 'hrsh7th/cmp-cmdline' },
                 { 'hrsh7th/cmp-nvim-lua' },
                 { 'hrsh7th/cmp-nvim-lsp' },
-                { 'hrsh7th/cmp-nvim-lsp-signature-help' },
+                -- { 'hrsh7th/cmp-nvim-lsp-signature-help' },
             },
             config = function()
                 require('user.cmp')
