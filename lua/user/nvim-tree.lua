@@ -7,6 +7,9 @@ end
 vim.keymap.set('n', '<C-e>', function()
     require('nvim-tree.api').tree.find_file({ open = true, focus = true })
 end, { desc = 'NvimTree: Reveal current file' })
+vim.keymap.set('n', '<leader><S-e>', function()
+    require('nvim-tree.api').tree.find_file({ open = true, focus = true })
+end, { desc = 'NvimTree: Reveal current file' })
 
 local function my_on_attach(bufnr)
     local api = require('nvim-tree.api')
