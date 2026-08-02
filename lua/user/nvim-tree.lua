@@ -31,8 +31,8 @@ local function my_on_attach(bufnr)
     vim.keymap.set('n', '<2-LeftMouse>', api.node.open.edit, opts('Open'))
     vim.keymap.set('n', '<S-h>', 'gT', opts('Prev tab'))
     vim.keymap.set('n', '<S-l>', 'gt', opts('Next tab'))
-    vim.keymap.set('n', '<S-Left>', 'gT', opts('Resize'))
-    vim.keymap.set('n', '<S-Right>', 'gt', opts('Resize'))
+    vim.keymap.set('n', '<C-S-Left>', 'gT', opts('Resize'))
+    vim.keymap.set('n', '<C-S-Right>', 'gt', opts('Resize'))
 
     vim.keymap.set(
         'n',
