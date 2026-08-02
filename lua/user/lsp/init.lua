@@ -67,6 +67,14 @@ vim.lsp.config('arduino_language_server', {
 
     cmd = {
         'arduino-language-server',
+        '-cli',
+        'arduino-cli',
+        '-cli-config',
+        vim.fn.expand('~/Library/Arduino15/arduino-cli.yaml'),
+        '-clangd',
+        'clangd',
+        '-fqbn',
+        'arduino:avr:uno',
     },
 })
 

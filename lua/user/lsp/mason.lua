@@ -10,6 +10,7 @@ function M.bootstrap()
     local pkgs = {
         { pkg = 'lua-language-server', exe = 'lua-language-server' },
         { pkg = 'clangd', exe = 'clangd', mason_optional = true },
+        { pkg = 'arduino-language-server', exe = 'arduino-language-server' },
         { pkg = 'pyright', exe = 'pyright-langserver' },
         { pkg = 'ruff', exe = 'ruff' },
         { pkg = 'stylua', exe = 'stylua' },

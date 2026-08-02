@@ -10,7 +10,7 @@ require('user.lazy')
 require('user.format')
 
 vim.api.nvim_create_autocmd('FileType', {
-    pattern = { 'c', 'cpp', 'lua', 'python' },
+    pattern = { 'arduino', 'c', 'cpp', 'lua', 'python' },
     callback = function(args)
         vim.schedule(function()
             require('nvim-treesitter')
