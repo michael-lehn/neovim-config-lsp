@@ -141,10 +141,16 @@ vim.api.nvim_create_autocmd('FileType', {
         local fname = vim.api.nvim_buf_get_name(args.buf)
         local root = vim.fs.dirname(fname)
 
+        local arduino_capabilities = vim.deepcopy(capabilities)
+
+        arduino_capabilities.textDocument.semanticTokens = vim.NIL
+        arduino_capabilities.workspace = arduino_capabilities.workspace or {}
+        arduino_capabilities.workspace.semanticTokens = vim.NIL
+
         vim.lsp.start({
             name = 'arduino_language_server',
 
-            capabilities = capabilities,
+            capabilities = arduino_capabilities,
 
             cmd = {
                 'arduino-language-server',
