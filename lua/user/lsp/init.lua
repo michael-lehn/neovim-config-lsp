@@ -141,6 +141,12 @@ vim.api.nvim_create_autocmd('FileType', {
         local fname = vim.api.nvim_buf_get_name(args.buf)
         local root = vim.fs.dirname(fname)
 
+        -- NOTE:
+        -- Do not pass the default capabilities here.
+        -- Recent versions of arduino-language-server crash with
+        -- "workspace/semanticTokens/refresh" (exit code 2) when
+        -- semantic token capabilities are advertised.
+
         local arduino_capabilities = vim.deepcopy(capabilities)
 
         arduino_capabilities.textDocument.semanticTokens = vim.NIL
