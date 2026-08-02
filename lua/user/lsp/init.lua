@@ -79,7 +79,7 @@ local ft_to_server = {
 }
 
 vim.api.nvim_create_autocmd('FileType', {
-    pattern = { 'c', 'cpp', 'lua', 'python' },
+    pattern = { 'arduino', 'c', 'cpp', 'lua', 'python' },
     callback = function(args)
         local ft = vim.bo[args.buf].filetype
         local server = ft_to_server[ft]
