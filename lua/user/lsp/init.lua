@@ -79,7 +79,6 @@ vim.lsp.config('arduino_language_server', {
 })
 
 local ft_to_server = {
-    arduino = 'arduino_language_server',
     c = 'clangd',
     cpp = 'clangd',
     lua = 'lua_ls',
