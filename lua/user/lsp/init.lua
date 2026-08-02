@@ -108,7 +108,7 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 
 vim.lsp.config('arduino_language_server', {
-    capabilities = {},
+    capabilities = capabilities,
 
     filetypes = { 'arduino' },
 
