@@ -3,6 +3,7 @@ vim.api.nvim_create_user_command('Format', function()
     if
         vim.bo[bufnr].filetype == 'c'
         or vim.bo[bufnr].filetype == 'cpp'
+        or vim.bo[bufnr].filetype == 'ino'
         or vim.bo[bufnr].filetype == 'objc'
         or vim.bo[bufnr].filetype == 'objcpp'
     then
