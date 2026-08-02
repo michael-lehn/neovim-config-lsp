@@ -117,7 +117,7 @@ vim.api.nvim_create_autocmd('FileType', {
         vim.lsp.start({
             name = 'arduino_language_server',
 
-            capabilities = capabilities,
+            capabilities = {},
 
             cmd = {
                 'arduino-language-server',
