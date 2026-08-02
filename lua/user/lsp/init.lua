@@ -49,7 +49,29 @@ vim.lsp.config('ruff', {
     capabilities = capabilities,
 })
 
+vim.lsp.config('arduino_language_server', {
+    capabilities = capabilities,
+
+    filetypes = { 'arduino' },
+
+    root_dir = function(bufnr, on_dir)
+        local fname = vim.api.nvim_buf_get_name(bufnr)
+
+        local root = vim.fs.root(fname, {
+            'sketch.yaml',
+            '.git',
+        })
+
+        on_dir(root or vim.fs.dirname(fname))
+    end,
+
+    cmd = {
+        'arduino-language-server',
+    },
+})
+
 local ft_to_server = {
+    arduino = 'arduino_language_server',
     c = 'clangd',
     cpp = 'clangd',
     lua = 'lua_ls',
