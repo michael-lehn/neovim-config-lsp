@@ -87,7 +87,7 @@ local ft_to_server = {
 }
 
 vim.api.nvim_create_autocmd('FileType', {
-    pattern = { 'arduino', 'c', 'cpp', 'lua', 'python' },
+    pattern = { 'c', 'cpp', 'lua', 'python' },
     callback = function(args)
         local ft = vim.bo[args.buf].filetype
         local server = ft_to_server[ft]
@@ -105,5 +105,40 @@ vim.api.nvim_create_autocmd('FileType', {
         end
 
         vim.lsp.start(cfg, { bufnr = args.buf })
+    end,
+})
+
+vim.api.nvim_create_autocmd('FileType', {
+    pattern = 'arduino',
+
+    callback = function(args)
+        local filename = vim.api.nvim_buf_get_name(args.buf)
+        local root = vim.fs.dirname(filename)
+
+        vim.lsp.start({
+            name = 'arduino_language_server',
+
+            cmd = {
+                'arduino-language-server',
+
+                '-cli',
+                'arduino-cli',
+
+                '-cli-config',
+                vim.fn.expand('~/Library/Arduino15/arduino-cli.yaml'),
+
+                '-clangd',
+                'clangd',
+
+                '-fqbn',
+                'arduino:avr:uno',
+            },
+
+            root_dir = root,
+
+            capabilities = capabilities,
+        }, {
+            bufnr = args.buf,
+        })
     end,
 })
