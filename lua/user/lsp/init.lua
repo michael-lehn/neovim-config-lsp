@@ -113,7 +113,6 @@ vim.api.nvim_create_autocmd('FileType', {
 
     callback = function(args)
         local filename = vim.api.nvim_buf_get_name(args.buf)
-        local root = vim.fs.dirname(filename)
 
         vim.lsp.start({
             name = 'arduino_language_server',
@@ -134,7 +133,10 @@ vim.api.nvim_create_autocmd('FileType', {
                 'arduino:avr:uno',
             },
 
-            root_dir = root,
+            root_dir = function(bufnr, on_dir)
+                local fname = vim.api.nvim_buf_get_name(bufnr)
+                on_dir(vim.fs.dirname(fname))
+            end,
 
             capabilities = capabilities,
         }, {
